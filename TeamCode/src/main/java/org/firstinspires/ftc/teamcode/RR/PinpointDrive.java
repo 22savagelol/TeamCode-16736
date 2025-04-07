@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.RR;
 
-
-
 import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.zyxOrientation;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.ftc.FlightRecorder;
-import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
-import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
 import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -42,8 +38,8 @@ public class PinpointDrive extends MecanumDrive {
          */
         //These are tuned for 3110-0002-0001 Product Insight #1
         // RR localizer note: These units are inches, presets are converted from mm (which is why they are inexact)
-        public double xOffset = -3.3071;
-        public double yOffset = -6.6142;
+        public double xOffset = .375;
+        public double yOffset = -.0675;
 
         /*
         Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
@@ -55,7 +51,7 @@ public class PinpointDrive extends MecanumDrive {
         To get this value from inPerTick, first convert the value to millimeters (multiply by 25.4)
         and then take its inverse (one over the value)
          */
-        public double encoderResolution = GoBildaPinpointDriverRR.goBILDA_4_BAR_POD;
+        public double encoderResolution = GoBildaPinpointDriver.goBILDA_4_BAR_POD;
 
         /*
         Set the direction that each of the two odometry pods count. The X (forward) pod should
@@ -76,23 +72,23 @@ public class PinpointDrive extends MecanumDrive {
     }
 
     public static Params PARAMS = new Params();
-    public GoBildaPinpointDriverRR pinpoint;
+    public GoBildaPinpointDriver pinpoint;
     private Pose2d lastPinpointPose = pose;
 
     public PinpointDrive(HardwareMap hardwareMap, Pose2d pose) {
         super(hardwareMap, pose);
         FlightRecorder.write("PINPOINT_PARAMS",PARAMS);
-        pinpoint = hardwareMap.get(GoBildaPinpointDriverRR.class,PARAMS.pinpointDeviceName);
+        pinpoint = hardwareMap.get(GoBildaPinpointDriver.class,PARAMS.pinpointDeviceName);
 
         if (PARAMS.usePinpointIMUForTuning) {
             lazyImu = new LazyImu(hardwareMap, PARAMS.pinpointDeviceName, new RevHubOrientationOnRobot(zyxOrientation(0, 0, 0)));
         }
 
         // RR localizer note: don't love this conversion (change driver?)
-        pinpoint.setOffsets(DistanceUnit.MM.fromInches(PARAMS.xOffset), DistanceUnit.MM.fromInches(PARAMS.yOffset));
+        pinpoint.setOffsets(PARAMS.xOffset, PARAMS.yOffset, DistanceUnit.INCH);
 
 
-        pinpoint.setEncoderResolution(PARAMS.encoderResolution);
+        pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
 
         pinpoint.setEncoderDirections(PARAMS.xDirection, PARAMS.yDirection);
 
@@ -113,7 +109,7 @@ public class PinpointDrive extends MecanumDrive {
             throw new RuntimeException(e);
         }
 
-        pinpoint.setPosition(pose);
+        pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, pose.position.x, pose.position.y, AngleUnit.RADIANS, pose.heading.toDouble()));
     }
     @Override
     public PoseVelocity2d updatePoseEstimate() {
@@ -125,7 +121,7 @@ public class PinpointDrive extends MecanumDrive {
             // I don't like this solution at all, but it preserves compatibility.
             // The only alternative is to add getter and setters, but that breaks compat.
             // Potential alternate solution: timestamp the pose set and backtrack it based on speed?
-            pinpoint.setPosition(pose);
+            pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, pose.position.x, pose.position.y, AngleUnit.RADIANS, pose.heading.toDouble()));
         }
         pinpoint.update();
         pose = pinpoint.getPositionRR();

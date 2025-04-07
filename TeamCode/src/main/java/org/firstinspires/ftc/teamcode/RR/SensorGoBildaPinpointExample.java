@@ -29,6 +29,8 @@ import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 import java.util.Locale;
 
 /*
@@ -114,8 +116,8 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         odo.resetPosAndIMU();
 
         telemetry.addData("Status", "Initialized");
-        telemetry.addData("X offset", odo.getXOffset());
-        telemetry.addData("Y offset", odo.getYOffset());
+        telemetry.addData("X offset", odo.getXOffset(DistanceUnit.INCH));
+        telemetry.addData("Y offset", odo.getYOffset(DistanceUnit.INCH));
         telemetry.addData("Device Version Number:", odo.getDeviceVersion());
         telemetry.addData("Device SCalar", odo.getYawScalar());
         telemetry.update();

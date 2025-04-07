@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RR.MecanumDrive;
 import org.firstinspires.ftc.teamcode.RR.PinpointDrive;
 
@@ -24,7 +26,7 @@ public class DriveTrain {
             double rx = rightStickX;
 
             drive.localizer.update();
-            double botHeading = drive.getLastPinpointPose().heading.toDouble();
+            double botHeading = drive.pinpoint.getHeading(AngleUnit.RADIANS);
 
             // Rotate the movement direction counter to the bot's rotation
             double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
