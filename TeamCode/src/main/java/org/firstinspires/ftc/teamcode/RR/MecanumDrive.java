@@ -42,6 +42,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Config.Port;
+import org.firstinspires.ftc.teamcode.Config.RobotConfig;
 import org.firstinspires.ftc.teamcode.RR.messages.DriveCommandMessage;
 import org.firstinspires.ftc.teamcode.RR.messages.MecanumCommandMessage;
 import org.firstinspires.ftc.teamcode.RR.messages.MecanumLocalizerInputsMessage;
@@ -54,6 +55,7 @@ import java.util.List;
 
 @Config
 public class MecanumDrive {
+    static RobotConfig robotConfig = new RobotConfig();
     public static class Params {
         // IMU orientation
         // TODO: fill in these values based on
@@ -61,16 +63,16 @@ public class MecanumDrive {
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
 
         // drive model parameters
-        public double inPerTick = 1; // SparkFun OTOS Note: you can probably leave this at 1
-        public double lateralInPerTick = 0.7028368265746822; //0.736834497757;// OTOS: 0.872882;
-        public double trackWidthTicks = 15.5; //12.791; // otos 12.66;
+        public double inPerTick = .001978956002; // SparkFun OTOS Note: you can probably leave this at 1
+        public double lateralInPerTick = 0.0013599255312925999; //0.736834497757;// OTOS: 0.872882;
+        public double trackWidthTicks = 7832.412638;//11.302196899066315; //12.791; // otos 12.66;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.789541669118318; //0.7635681070147831; // OTOS: 0.563756515907424;
-        public double kV = 0.1224587608268715; //0.1946438443334511; // OTOS:0.19141851548064043;
+        public double kS = 1.7440029590047406; //0.7635681070147831; // OTOS: 0.563756515907424;
+        public double kV = 0.12786925052892806; //0.1946438443334511; // OTOS:0.19141851548064043;
         public double kA = 0.001;
 
         // path profile parameters (in inches)
@@ -95,7 +97,7 @@ public class MecanumDrive {
     public static Params PARAMS = new Params();
 
     public final MecanumKinematics kinematics = new MecanumKinematics(
-            PARAMS.inPerTick * PARAMS.trackWidthTicks, PARAMS.inPerTick / PARAMS.lateralInPerTick);
+            PARAMS.inPerTick * PARAMS.trackWidthTicks,PARAMS.inPerTick / PARAMS.lateralInPerTick);
 
     public final TurnConstraints defaultTurnConstraints = new TurnConstraints(
             PARAMS.maxAngVel, -PARAMS.maxAngAccel, PARAMS.maxAngAccel);

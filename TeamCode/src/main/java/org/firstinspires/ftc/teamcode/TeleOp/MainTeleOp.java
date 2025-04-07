@@ -44,6 +44,7 @@ public class MainTeleOp extends LinearOpMode {
             attachment.verticalGrabber(gamepad1.right_bumper);
             attachment.horizontalSlide(gamepad1.triangle);
             attachment.horizontalIntake(gamepad1.cross);
+            attachment.verticalHang(gamepad1.circle);
 
             driveTrain.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, gamepad1.right_trigger, .6);
 
