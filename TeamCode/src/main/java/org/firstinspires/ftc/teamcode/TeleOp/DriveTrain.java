@@ -19,7 +19,7 @@ public class DriveTrain {
     }
     public void drive(double leftStickY, double leftStickX, double rightStickX, double precise, double startSpeed) {
         if(field) {
-            double y = -leftStickY; // Remember, Y stick value is reversed
+            double y = leftStickY; // Remember, Y stick value is reversed
             double x = leftStickX;
             double rx = rightStickX;
 
